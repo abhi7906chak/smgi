@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:smgi/home_src.dart';
+import 'package:smgi/pages/login_sing_up_page.dart';
 import 'package:smgi/utiles/splash_src.dart';
 
 import 'firebase_options.dart';
@@ -25,8 +25,10 @@ class _MainSrcState extends State<MainSrc> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: "login",
       routes: {
-        "home": (context) => const HomeSrc(),
+        "login": (context) => const LoginSingUpPage(),
+        "home": (context) => const LoginSingUpPage(),
       },
       home: const SplashSrc(),
     );

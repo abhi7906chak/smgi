@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smgi/home_src.dart';
+import 'package:smgi/pages/login_sing_up_page.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashSrc extends StatefulWidget {
@@ -42,14 +42,14 @@ class _SplashSrcState extends State<SplashSrc> {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeSrc(),
+          builder: (context) => const LoginSingUpPage(),
         ),
         (route) => false);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     super.dispose();
     _controller.dispose();
   }
