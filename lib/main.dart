@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smgi/pages/login_page.dart';
 import 'package:smgi/pages/login_sing_up_page.dart';
 import 'package:smgi/utiles/splash_src.dart';
 
@@ -23,14 +25,15 @@ class MainSrc extends StatefulWidget {
 class _MainSrcState extends State<MainSrc> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "login",
+      initialRoute: "home",
       routes: {
-        "login": (context) => const LoginSingUpPage(),
-        "home": (context) => const LoginSingUpPage(),
+        "loginsrc": (context) => const LoginPageSrc(),
+        "login_singup_page": (context) => const LoginSingUpPage(),
+        "home": (context) => const SplashSrc(),
+        // "bh":(context) => const LoginSingUpPage(),
       },
-      home: const SplashSrc(),
     );
   }
 }
