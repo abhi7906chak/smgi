@@ -1,5 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 import 'package:smgi/utiles/snack_bar.dart';
 
 class LoginPageSrc extends StatefulWidget {
@@ -11,6 +15,8 @@ class LoginPageSrc extends StatefulWidget {
 
 class _LoginPageSrcState extends State<LoginPageSrc> {
   final _formkey = GlobalKey<FormState>();
+  final auth = FirebaseAuth.instance;
+  final googleIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,7 +36,8 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                   padding: const EdgeInsets.only(right: 30),
                   child: InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Get.back();
+                      // Navigator.pop(context);
                     },
                     child: Align(
                       alignment: Alignment.bottomRight,
@@ -49,16 +56,12 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                   child: Image.asset("assets/image/logo.gif"),
                   // color: Colors.amber,
                 ),
-
-                // const SizedBox(
-                //   height: 5,
-                // ),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Welcome to SMGI",
                     style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 35,
                         fontWeight: FontWeight.w600,
                         fontFamily: "Encode",
                         color: Color(0xFF161697),
@@ -71,25 +74,42 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                 const Text(
                   "LET ACCESS ALL WORK FROM HERE",
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       fontFamily: "Encode",
                       color: Colors.black,
                       decoration: TextDecoration.none),
                 ),
                 const SizedBox(
-                  height: 28,
+                  height: 10,
                 ),
-                SizedBox(
-                  height: 30,
-                  width: 32,
-                  child: Image.asset("assets/image/google.png"),
-                  // color: Colors.amber,
+                ElevatedButton(
+                  // onHover: (value) {
+                  //   Colors.accents;
+                  // },
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                  child: SizedBox(
+                      height: 40,
+                      width: 42,
+                      child: Image.asset("assets/image/google.png")),
+                  onPressed: () async {
+                    GoogleSignInAccount? usercred = await googleIn.signIn();
+                    GoogleSignInAuthentication? userauth =
+                        await usercred?.authentication;
+                    AuthCredential cred = GoogleAuthProvider.credential(
+                      accessToken: userauth?.accessToken,
+                      idToken: userauth?.idToken,
+                    );
+                    UserCredential user = await auth.signInWithCredential(cred);
+                    // print(user.user?.displayName);
+                    Get.to(const HomeSrc(), transition: Transition.zoom);
+                  },
                 ),
                 const SizedBox(
-                  height: 28,
+                  height: 10,
                 ),
-
                 Form(
                     key: _formkey,
                     child: Column(
@@ -119,6 +139,9 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                                 if (value!.isEmpty) {
                                   snack_bar("Enter Email", "Oops", context,
                                       ContentType.failure);
+                                } else if (value.length < 6) {
+                                  snack_bar("Enter valid Email", "Oops",
+                                      context, ContentType.failure);
                                 }
                                 return null;
                               },
@@ -186,25 +209,32 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                 const SizedBox(
                   height: 15,
                 ),
-                Container(
-                  height: 40.5,
-                  width: 119.5,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(21),
-                    // color: Colors.amberAccent,
-                  ),
-                  child: const Center(
-                      child: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontFamily: "Encode",
-                      fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.none,
-                      color: Color(0xFF161697),
+                InkWell(
+                  onTap: () {
+                    if (_formkey.currentState!.validate()) {
+                      print("object");
+                    }
+                  },
+                  child: Container(
+                    height: 40.5,
+                    width: 119.5,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(21),
+                      // color: Colors.amberAccent,
                     ),
-                  )),
+                    child: const Center(
+                        child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontFamily: "Encode",
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.none,
+                        color: Color(0xFF161697),
+                      ),
+                    )),
+                  ),
                 ),
                 Image.asset("assets/image/1.png")
               ],

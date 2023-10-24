@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smgi/pages/login_page.dart';
+import 'package:smgi/pages/singup_page.dart';
 
 class LoginSingUpPage extends StatefulWidget {
   const LoginSingUpPage({super.key});
@@ -39,7 +40,7 @@ class _LoginSingUpPageState extends State<LoginSingUpPage> {
                   child: Text(
                     "Welcome to SMGI",
                     style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 35,
                         fontWeight: FontWeight.w600,
                         fontFamily: "Encode",
                         color: Color(0xFF161697),
@@ -52,7 +53,7 @@ class _LoginSingUpPageState extends State<LoginSingUpPage> {
                 const Text(
                   "LET ACCESS ALL WORK FROM HERE",
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       fontFamily: "Encode",
                       color: Colors.black,
@@ -84,31 +85,37 @@ class _LoginSingUpPageState extends State<LoginSingUpPage> {
                   ),
                   onTap: () {
                     Get.to(() => const LoginPageSrc(),
-                        transition: Transition.downToUp);
+                        transition: Transition.leftToRightWithFade);
                   },
                 ),
                 const SizedBox(
                   height: 36,
                 ),
-                Container(
-                  height: 40.5,
-                  width: 119.5,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(21),
-                    // color: Colors.amberAccent,
-                  ),
-                  child: const Center(
-                      child: Text(
-                    "Sign up",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "Encode",
-                      fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.none,
-                      color: Color(0xFF161697),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const SingUpPage(),
+                        transition: Transition.leftToRightWithFade);
+                  },
+                  child: Container(
+                    height: 40.5,
+                    width: 119.5,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(21),
+                      // color: Colors.amberAccent,
                     ),
-                  )),
+                    child: const Center(
+                        child: Text(
+                      "Sign up",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Encode",
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.none,
+                        color: Color(0xFF161697),
+                      ),
+                    )),
+                  ),
                 ),
                 SizedBox(
                   child: Image.asset("assets/image/0.png"),

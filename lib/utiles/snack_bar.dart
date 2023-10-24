@@ -7,14 +7,14 @@ void snack_bar(
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       // clipBehavior: Clip.antiAlias,
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 4),
 
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
-        title: title,
-        message: msg,
+        title: msg,
+        message: title,
         contentType: con,
       ),
     ),

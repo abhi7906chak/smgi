@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smgi/pages/login_page.dart';
 import 'package:smgi/pages/login_sing_up_page.dart';
+import 'package:smgi/pages/singup_page.dart';
 import 'package:smgi/utiles/splash_src.dart';
 
 import 'firebase_options.dart';
@@ -29,6 +30,8 @@ class _MainSrcState extends State<MainSrc> {
       debugShowCheckedModeBanner: false,
       initialRoute: "home",
       routes: {
+        // "verifyemail": (context) => const VerifyEmailSrc(),
+        "singupsrc": (context) => const SingUpPage(),
         "loginsrc": (context) => const LoginPageSrc(),
         "login_singup_page": (context) => const LoginSingUpPage(),
         "home": (context) => const SplashSrc(),
