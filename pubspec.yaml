@@ -45,7 +45,8 @@ dependencies:
   awesome_snackbar_content: ^0.1.3
   flutter_text_form_field: ^1.0.3
   font_awesome_flutter: ^10.6.0
-  email_auth: ^1.1.1
+  email_validator: ^2.1.17
+  flutter_expandable_fab: ^2.0.0
   get: ^4.6.6
   google_sign_in: ^6.1.5
   fluttertoast: ^8.2.2

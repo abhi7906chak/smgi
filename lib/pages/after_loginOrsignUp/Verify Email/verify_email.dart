@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
@@ -21,7 +22,8 @@ class VerifyEmailSrc extends StatefulWidget {
 class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
   late VideoPlayerController _controller;
   Timer? _timer;
-  late var usercred;
+  final key = GlobalKey<ExpandableFabState>();
+  // late var usercred;
 
   final auth = FirebaseAuth.instance;
 
@@ -34,14 +36,7 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
       });
 
     _play();
-    _timer = Timer.periodic(Duration(milliseconds: 200), (timer) async {
-      final user = await auth.currentUser!;
-      await user.reload();
-      if (user.emailVerified) {
-        _timer!.cancel();
-        Get.to(() => HomeSrc());
-      }
-    });
+    // checkData();
   }
 
   @override
@@ -72,8 +67,7 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
                               .delete()
                               .then((value) => Get.back());
                         } catch (e) {
-                          snack_bar("SomeThing Went Wrong !! ", "Try Again!!",
-                              context, ContentType.warning);
+                          somethingwrong();
                         }
                       },
                       child: const FaIcon(FontAwesomeIcons.chevronLeft),
@@ -108,30 +102,11 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.23,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: FloatingActionButton(
-                        child: const FaIcon(FontAwesomeIcons.question),
-                        onPressed: () {
-                          snack_bar(
-                            "Ooh No!",
-                            "Go back and Re-sign up.\nIf you've verified your email, wait or try again.",
-                            context,
-                            ContentType.help,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
         ),
+       
       ),
     );
   }
@@ -139,5 +114,18 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
   Future<void> _play() async {
     _controller.setLooping(true);
     _controller.play();
+  }
+
+  void go() {
+    Get.offAll(
+        MaterialPageRoute(
+          builder: (context) => const HomeSrc(),
+        ),
+        transition: Transition.zoom);
+  }
+
+  void somethingwrong() {
+    snack_bar("SomeThing Went Wrong !! ", "Try Again!!", context,
+        ContentType.warning);
   }
 }

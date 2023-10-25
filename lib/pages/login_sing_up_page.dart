@@ -89,7 +89,7 @@ class _LoginSingUpPageState extends State<LoginSingUpPage> {
                   },
                 ),
                 const SizedBox(
-                  height: 36,
+                  height: 20,
                 ),
                 InkWell(
                   onTap: () {

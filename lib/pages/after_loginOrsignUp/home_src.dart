@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smgi/pages/login_sing_up_page.dart';
 
 class HomeSrc extends StatefulWidget {
   const HomeSrc({super.key});
@@ -16,9 +17,14 @@ class _HomeSrcState extends State<HomeSrc> {
       appBar: AppBar(actions: [
         IconButton(
             onPressed: () async {
-              await auth.signOut();
+              await auth.signOut().then((value) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginSingUpPage(),
+                  ),
+                  (route) => false));
             },
-            icon: Icon(Icons.logout))
+            icon: const Icon(Icons.logout))
       ]),
       body: Container(
         color: Colors.amber,

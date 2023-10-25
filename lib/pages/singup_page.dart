@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smgi/pages/after_loginOrsignUp/Verify%20Email/verify_email.dart';
-import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
+// import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 import 'package:smgi/utiles/snack_bar.dart';
 
 class SingUpPage extends StatefulWidget {
@@ -21,14 +21,13 @@ class _SingUpPageState extends State<SingUpPage> {
   final namecon = TextEditingController();
   final emailcon = TextEditingController();
   final auth = FirebaseAuth.instance;
-  // late bool userVerifed;
+  bool loding = false;
   String nameError = "";
   String emailError = "";
   String passError = "";
   String epassError = "";
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -267,9 +266,9 @@ class _SingUpPageState extends State<SingUpPage> {
                                 email: emailcon.text,
                                 password: passwordcon.text);
                         await usercred.user!.sendEmailVerification();
-                        
+
                         succesMsg();
-                        Get.to(() =>  const VerifyEmailSrc(),
+                        Get.to(() => const VerifyEmailSrc(),
                             transition: Transition.zoom);
                       }
                     } catch (e) {
@@ -311,7 +310,7 @@ class _SingUpPageState extends State<SingUpPage> {
 
   void succesMsg() {
     snack_bar(
-        "Yeah !", "You Sing Up Successfull", context, ContentType.success);
+        "Yeah !", "Email Send To Your Mail", context, ContentType.success);
   }
 
   void emptyMsg() {

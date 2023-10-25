@@ -121,14 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  email_auth:
+  email_validator:
     dependency: "direct main"
     description:
-      name: email_auth
-      sha256: d83bce63de8167976693f503eea924af39654af2625f8733d0c1d29d03aef012
+      name: email_validator
+      sha256: e9a90f27ab2b915a27d7f9c2a7ddda5dd752d6942616ee83529b686fc086221b
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "2.1.17"
   fake_async:
     dependency: transitive
     description:
@@ -246,6 +246,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_expandable_fab:
+    dependency: "direct main"
+    description:
+      name: flutter_expandable_fab
+      sha256: "2aa5735bebcdbc49f43bcb32a29f9f03a9b7029212b8cd9837ae332ab2edf647"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

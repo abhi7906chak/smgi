@@ -22,15 +22,6 @@ class _SplashSrcState extends State<SplashSrc> {
         setState(() {});
       });
     _play();
-    final user = auth.currentUser;
-    if (user != null) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeSrc(),
-          ),
-          (route) => false);
-    }
   }
 
   @override
@@ -55,13 +46,24 @@ class _SplashSrcState extends State<SplashSrc> {
   }
 
   void go() {
+    final user = auth.currentUser;
+    if (user != null) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeSrc(),
+          ),
+          (route) => false);
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginSingUpPage(),
+          ),
+          (route) => false);
+    }
+   
     // Get.offAll(() => const LoginSingUpPage());
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginSingUpPage(),
-        ),
-        (route) => false);
   }
 
   @override
