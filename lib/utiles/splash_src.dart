@@ -47,7 +47,7 @@ class _SplashSrcState extends State<SplashSrc> {
 
   void go() {
     final user = auth.currentUser;
-    if (user != null) {
+    if (user != null && user.emailVerified) {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -62,7 +62,7 @@ class _SplashSrcState extends State<SplashSrc> {
           ),
           (route) => false);
     }
-   
+
     // Get.offAll(() => const LoginSingUpPage());
   }
 

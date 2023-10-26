@@ -1,9 +1,12 @@
 // import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smgi/pages/after_loginOrsignUp/Verify%20Email/verify_email.dart';
+import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 // import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 import 'package:smgi/utiles/snack_bar.dart';
 
@@ -15,6 +18,7 @@ class SingUpPage extends StatefulWidget {
 }
 
 class _SingUpPageState extends State<SingUpPage> {
+  final googleIn = GoogleSignIn();
   final _formkey = GlobalKey<FormState>();
   final passwordcon = TextEditingController();
   final repasswordcon = TextEditingController();
@@ -81,9 +85,6 @@ class _SingUpPageState extends State<SingUpPage> {
                         color: Color(0xFF161697),
                         decoration: TextDecoration.none),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 const Text(
                   "LET ACCESS ALL WORK FROM HERE",
@@ -261,15 +262,23 @@ class _SingUpPageState extends State<SingUpPage> {
                       } else if (passwordcon.text != repasswordcon.text) {
                         matchPassMsg();
                       } else {
-                        UserCredential usercred =
-                            await auth.createUserWithEmailAndPassword(
-                                email: emailcon.text,
-                                password: passwordcon.text);
-                        await usercred.user!.sendEmailVerification();
+                        if (checkEmail()) {
+                          UserCredential usercred =
+                              await auth.createUserWithEmailAndPassword(
+                                  email: emailcon.text,
+                                  password: passwordcon.text);
+                          await usercred.user!.sendEmailVerification();
 
-                        succesMsg();
-                        Get.to(() => const VerifyEmailSrc(),
-                            transition: Transition.zoom);
+                          succesMsg();
+                          Get.to(() => const VerifyEmailSrc(),
+                              transition: Transition.zoom);
+                        } else {
+                          snack_bar(
+                              "Email",
+                              "Enter A Valid Mail Or Check You Mail",
+                              context,
+                              ContentType.warning);
+                        }
                       }
                     } catch (e) {
                       firebaseError(e);
@@ -296,6 +305,65 @@ class _SingUpPageState extends State<SingUpPage> {
                     )),
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1 / 2 - 120,
+                      color: Colors.black,
+                      height: 1,
+                    ),
+                    const Text(
+                      "Continue with",
+                      style: TextStyle(fontFamily: "Encode"),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1 / 2 - 120,
+                      color: Colors.black,
+                      height: 1,
+                    )
+                  ],
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                  child: SizedBox(
+                      height: 40,
+                      width: 42,
+                      child: SizedBox(
+                          child: Image.asset("assets/image/google.png"))),
+                  onPressed: () async {
+                    show();
+                    try {
+                      GoogleSignInAccount? usercred = await googleIn.signIn();
+
+                      GoogleSignInAuthentication? userauth =
+                          await usercred?.authentication;
+                      AuthCredential cred = GoogleAuthProvider.credential(
+                        accessToken: userauth?.accessToken,
+                        idToken: userauth?.idToken,
+                      );
+                      await auth.signInWithCredential(cred).then((value) {
+                        snack_bar("Let's Go", "You Get In The App Successfully",
+                            context, ContentType.success);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeSrc(),
+                            ),
+                            (route) => false);
+                      });
+
+                      // print(user.user?.displayName);
+                    } catch (e) {
+                      showwarning(e);
+                    }
+                  },
+                ),
                 Image.asset(
                   "assets/image/2.png",
                   // fit: BoxFit.fill,
@@ -306,6 +374,25 @@ class _SingUpPageState extends State<SingUpPage> {
         ),
       ),
     );
+  }
+
+  bool checkEmail() {
+    bool verifed = EmailValidator.validate(emailcon.text.toString());
+    if (!verifed) {
+      snack_bar("Enter A Valid Mail", "Not A Valied Mail Try To Corecte It ",
+          context, ContentType.warning);
+      return false;
+    }
+    return true;
+  }
+
+  void showwarning(e) {
+    snack_bar("Your Phone Does Not Support At This Time Try Again Later",
+        "Not Supported", context, ContentType.warning);
+  }
+
+  void show() {
+    snack_bar("Wait !!", "Wait For A Second", context, ContentType.success);
   }
 
   void succesMsg() {
@@ -330,6 +417,8 @@ class _SingUpPageState extends State<SingUpPage> {
   void firebaseError(Object e) {
     if (e is FirebaseAuthException) {
       snack_bar("Error!", e.message.toString(), context, ContentType.failure);
+    } else {
+      snack_bar("Error!", e.toString(), context, ContentType.failure);
     }
   }
 }

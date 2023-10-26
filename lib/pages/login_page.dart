@@ -86,47 +86,7 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                       decoration: TextDecoration.none),
                 ),
                 const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor: MaterialStateProperty.all(Colors.white)),
-                  child: SizedBox(
-                      height: 40,
-                      width: 42,
-                      child: SizedBox(
-                          child: Image.asset("assets/image/google.png"))),
-                  onPressed: () async {
-                    show();
-                    try {
-                      GoogleSignInAccount? usercred = await googleIn.signIn();
-
-                      GoogleSignInAuthentication? userauth =
-                          await usercred?.authentication;
-                      AuthCredential cred = GoogleAuthProvider.credential(
-                        accessToken: userauth?.accessToken,
-                        idToken: userauth?.idToken,
-                      );
-                      await auth.signInWithCredential(cred).then((value) {
-                        snack_bar("Let's Go", "You Get In The App Successfully",
-                            context, ContentType.success);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeSrc(),
-                            ),
-                            (route) => false);
-                      });
-
-                      // print(user.user?.displayName);
-                    } catch (e) {
-                      showwarning(e);
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Form(
                     key: _formkey,
@@ -200,7 +160,7 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                   ],
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 InkWell(
                   onTap: () async {
@@ -259,7 +219,69 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                     )),
                   ),
                 ),
-                Image.asset("assets/image/1.png")
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1 / 2 - 120,
+                      color: Colors.black,
+                      height: 1,
+                    ),
+                    const Text(
+                      "Continue with",
+                      style: TextStyle(fontFamily: "Encode"),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1 / 2 - 120,
+                      color: Colors.black,
+                      height: 1,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                  child: SizedBox(
+                      height: 40,
+                      width: 42,
+                      child: SizedBox(
+                          child: Image.asset("assets/image/google.png"))),
+                  onPressed: () async {
+                    show();
+                    try {
+                      GoogleSignInAccount? usercred = await googleIn.signIn();
+
+                      GoogleSignInAuthentication? userauth =
+                          await usercred?.authentication;
+                      AuthCredential cred = GoogleAuthProvider.credential(
+                        accessToken: userauth?.accessToken,
+                        idToken: userauth?.idToken,
+                      );
+                      await auth.signInWithCredential(cred).then((value) {
+                        snack_bar("Let's Go", "You Get In The App Successfully",
+                            context, ContentType.success);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeSrc(),
+                            ),
+                            (route) => false);
+                      });
+
+                      // print(user.user?.displayName);
+                    } catch (e) {
+                      showwarning(e);
+                    }
+                  },
+                ),
+                Image.asset("assets/image/1.png"),
               ],
             ),
           ),

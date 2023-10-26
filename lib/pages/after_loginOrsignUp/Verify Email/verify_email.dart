@@ -102,11 +102,33 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
                     ),
                   ),
                 ),
+                FloatingActionButton(
+                  heroTag: null,
+                  onPressed: () async {
+                    try {
+                      final user = auth.currentUser!;
+                      user.reload();
+                      if (user.emailVerified) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeSrc(),
+                            ),
+                            (route) => false);
+                      } else {
+                        debugPrint("go back");
+                      }
+                    } catch (e) {
+                      snack_bar(
+                          "error", e.toString(), context, ContentType.failure);
+                    }
+                  },
+                  child: const FaIcon(FontAwesomeIcons.arrowRotateLeft),
+                )
               ],
             ),
           ),
         ),
-       
       ),
     );
   }
