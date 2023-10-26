@@ -96,38 +96,51 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
                   text: const TextSpan(
                     text: "A verification mail is sent to your email",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: "Encode",
                       color: Colors.black87,
                     ),
                   ),
                 ),
-                FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () async {
-                    try {
-                      final user = auth.currentUser!;
-                      user.reload();
-                      if (user.emailVerified) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeSrc(),
-                            ),
-                            (route) => false);
-                      } else {
-                        debugPrint("go back");
-                      }
-                    } catch (e) {
-                      snack_bar(
-                          "error", e.toString(), context, ContentType.failure);
-                    }
-                  },
-                  child: const FaIcon(FontAwesomeIcons.arrowRotateLeft),
-                )
+                SizedBox(
+                  height: 5,
+                ),
+                RichText(
+                  text: const TextSpan(
+                    text: "Go to Gmail and verify than press the Reload Button",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: "Encode",
+                      color: Colors.purple,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          heroTag: null,
+          onPressed: () async {
+            show();
+            try {
+              final user = auth.currentUser!;
+              user.reload();
+              if (user.emailVerified) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeSrc(),
+                    ),
+                    (route) => false);
+              } else {
+                debugPrint("go back");
+              }
+            } catch (e) {
+              snack_bar("error", e.toString(), context, ContentType.failure);
+            }
+          },
+          child: const FaIcon(FontAwesomeIcons.arrowRotateLeft),
         ),
       ),
     );
@@ -144,6 +157,10 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
           builder: (context) => const HomeSrc(),
         ),
         transition: Transition.zoom);
+  }
+
+  void show() {
+    snack_bar("Wait !!", "Wait For A Second", context, ContentType.success);
   }
 
   void somethingwrong() {
