@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+// import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
@@ -22,7 +22,7 @@ class VerifyEmailSrc extends StatefulWidget {
 class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
   late VideoPlayerController _controller;
   Timer? _timer;
-  final key = GlobalKey<ExpandableFabState>();
+  // final key = GlobalKey<ExpandableFabState>();
   // late var usercred;
 
   final auth = FirebaseAuth.instance;
@@ -102,7 +102,7 @@ class _VerifyEmailSrcState extends State<VerifyEmailSrc> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 RichText(

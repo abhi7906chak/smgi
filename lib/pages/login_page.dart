@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
+import 'package:smgi/pages/forget_pass/password.dart';
 import 'package:smgi/utiles/snack_bar.dart';
 
 class LoginPageSrc extends StatefulWidget {
@@ -146,7 +147,9 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                       height: 34,
                       width: 250,
                       child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(()=> FpassWord(econ: emailcon.toString()));
+                          },
                           child: const Text(
                             "Forget Password ?",
                             style: TextStyle(
