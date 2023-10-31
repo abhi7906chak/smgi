@@ -42,11 +42,13 @@ dependencies:
   video_player: ^2.7.2
   flutter_native_splash: ^2.3.4
   # google_fonts: ^6.1.0
-  awesome_snackbar_content: ^0.1.3
+  awesome_snackbar_content: ^0.1.1
   flutter_text_form_field: ^1.0.3
   font_awesome_flutter: ^10.6.0
   email_validator: ^2.1.17
   flutter_expandable_fab: ^2.0.0
+  calender_picker: ^2.0.1
+  table_calendar: ^3.0.8
   get: ^4.6.6
   google_sign_in: ^6.1.5
   fluttertoast: ^8.2.2

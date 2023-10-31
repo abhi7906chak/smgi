@@ -148,7 +148,7 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                       width: 250,
                       child: TextButton(
                           onPressed: () {
-                            Get.to(()=> FpassWord(econ: emailcon.toString()));
+                            Get.to(()=> const FpassWord());
                           },
                           child: const Text(
                             "Forget Password ?",

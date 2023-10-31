@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,8 +10,10 @@ import 'package:smgi/utiles/snack_bar.dart';
 import 'package:video_player/video_player.dart';
 
 class FpassWord extends StatefulWidget {
-  final String econ;
-  const FpassWord({super.key, required this.econ});
+  // final String econ;
+  const FpassWord({
+    super.key,
+  });
 
   @override
   State<FpassWord> createState() => _FpassWordState();
@@ -19,6 +22,7 @@ class FpassWord extends StatefulWidget {
 class _FpassWordState extends State<FpassWord> {
   final auth = FirebaseAuth.instance;
 // Timer ? _timer;
+  final emailcon = TextEditingController();
   Timer? _timer;
   late VideoPlayerController _controller;
 
@@ -72,19 +76,41 @@ class _FpassWordState extends State<FpassWord> {
               const SizedBox(
                 height: 20,
               ),
+              SizedBox(
+                height: 40,
+                width: 250,
+                child: TextFormField(
+                  controller: emailcon,
+                  decoration: InputDecoration(
+                      fillColor: Colors.black12,
+                      filled: true,
+                      hintText: "Email Address",
+                      hintStyle: const TextStyle(
+                        fontFamily: "Encode",
+                        color: Colors.black87,
+                        // fontWeight: FontWeight.w600
+                      ),
+                      contentPadding: const EdgeInsets.only(top: 10, left: 10),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(21))),
+                ),
+              ),
               ElevatedButton(
                   onPressed: () async {
                     try {
-                      await auth
-                          .sendPasswordResetEmail(email: widget.econ.toString())
-                          .then((value) {
-                        snack_bar(
-                            "Sent !!",
-                            "Check Mail And Reset You Password",
-                            context,
-                            ContentType.success);
-                        Get.back();
-                      });
+                      if (checkEmail()) {
+                        await auth
+                            .sendPasswordResetEmail(
+                                email: emailcon.text.toString())
+                            .then((value) {
+                          snack_bar(
+                              "Sent !!",
+                              "Check Mail And Reset You Password",
+                              context,
+                              ContentType.success);
+                          Get.back();
+                        });
+                      }
                     } catch (e) {
                       error(e);
                     }
@@ -98,6 +124,16 @@ class _FpassWordState extends State<FpassWord> {
         ),
       ),
     ));
+  }
+
+  bool checkEmail() {
+    bool verifed = EmailValidator.validate(emailcon.text.toString());
+    if (!verifed) {
+      snack_bar("Enter A Valid Mail", "Not A Valied Mail Try To Corecte It ",
+          context, ContentType.warning);
+      return false;
+    }
+    return true;
   }
 
   @override
