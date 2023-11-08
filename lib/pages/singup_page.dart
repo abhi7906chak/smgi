@@ -1,10 +1,12 @@
 // import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smgi/models/student_model.dart';
 import 'package:smgi/pages/after_loginOrsignUp/Verify%20Email/verify_email.dart';
 import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 // import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
@@ -23,6 +25,8 @@ class _SingUpPageState extends State<SingUpPage> {
   final passwordcon = TextEditingController();
   final repasswordcon = TextEditingController();
   final namecon = TextEditingController();
+  final firestore = FirebaseFirestore.instance;
+
   final emailcon = TextEditingController();
   final auth = FirebaseAuth.instance;
   bool loding = false;
@@ -30,6 +34,7 @@ class _SingUpPageState extends State<SingUpPage> {
   String emailError = "";
   String passError = "";
   String epassError = "";
+  final year = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -267,7 +272,22 @@ class _SingUpPageState extends State<SingUpPage> {
                               await auth.createUserWithEmailAndPassword(
                                   email: emailcon.text,
                                   password: passwordcon.text);
-                          await usercred.user!.sendEmailVerification();
+                          await usercred.user!
+                              .sendEmailVerification()
+                              .then((value) async {
+                            User user = auth.currentUser!;
+                            final studentData = student(
+                              name: namecon.text,
+                              uid: user.uid,
+                              photourl: "",
+                              email: emailcon.text,
+                              password: passwordcon.text,
+                            ).toJson();
+                            await firestore
+                                .collection("student")
+                                .doc(user.uid)
+                                .set(studentData);
+                          });
 
                           succesMsg();
                           Get.to(() => const VerifyEmailSrc(),

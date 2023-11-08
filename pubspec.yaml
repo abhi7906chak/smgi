@@ -47,8 +47,10 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   email_validator: ^2.1.17
   flutter_expandable_fab: ^2.0.0
-  calender_picker: ^2.0.1
-  table_calendar: ^3.0.8
+  # calender_picker: ^2.0.1
+  # table_calendar: ^3.0.8
+  cloud_firestore: ^4.12.2
+  flutter_heatmap_calendar: ^1.0.5
   get: ^4.6.6
   google_sign_in: ^6.1.5
   fluttertoast: ^8.2.2
