@@ -18,9 +18,13 @@ class _HomeSrcState extends State<HomeSrc> {
   final year = DateTime.now();
   final firestore = FirebaseFirestore.instance;
   late final String name;
-  Map<DateTime, int> datesheet = {};
+  Map<DateTime, int> datelist = {};
+
+  // Map<DateTime, int> datesheet = {};
+  // Map<DateTime, int> datesheets = {};
   bool isLoading = false;
   var userData = {};
+  Map<String, dynamic> datesheetString = {};
 
   @override
   void initState() {
@@ -37,12 +41,24 @@ class _HomeSrcState extends State<HomeSrc> {
           .collection("student")
           .doc(auth.currentUser!.uid)
           .get();
-      setState(() {
+      var date = await FirebaseFirestore.instance
+          .collection("student")
+          .doc(auth.currentUser!.uid)
+          .collection('atten')
+          .doc('1')
+          .get();
+      setState(() async {
         userData = userdata.data()!;
-        // datesheet = userdata['datesheet']; // Handle null data
-        if (userData.containsKey('datesheet')) {
-          datesheet = Map<DateTime, int>.from(userData['datesheet']);
-        }
+        Map<String, dynamic> sheet = await date.data()!['datesheets'];
+        debugPrint('$sheet');
+
+        sheet.forEach((key, value) {
+          DateTime dateTime = DateTime.parse(key);
+          int intValue = int.parse(value.toString());
+          datelist[dateTime] = intValue;
+        });
+        debugPrint(datelist.runtimeType.toString());
+        // Convert datesheetString to datesheet
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -124,82 +140,90 @@ class _HomeSrcState extends State<HomeSrc> {
                             fontSize: 20),
                       ),
                     ),
-                    Expanded(
-                      child: StreamBuilder(
-                        stream: ref.onValue,
-                        builder:
-                            (context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                          if (!snapshot.hasData) {
-                            return const CircularProgressIndicator();
-                          } else {
-                            Map<dynamic, dynamic> map =
-                                snapshot.data!.snapshot.value as dynamic;
-                            List<dynamic> data = [];
-                            data.clear();
-                            data = map.values.toList();
-                            int lastMonth;
-                            int startMonth;
-                            // String startMoonth;
-                            try {
-                              lastMonth =
-                                  int.parse(data[0]["last month"].toString());
-                              startMonth =
-                                  int.parse(data[0]["start month"].toString());
-                              debugPrint("Last Month: $lastMonth");
-                              debugPrint("Start Month: $startMonth");
-                            } catch (e) {
-                              debugPrint(e.toString());
-                              lastMonth = 0;
-                              startMonth = 0;
-                              // startMoonth = "";
-                              debugPrint(
-                                  "Error occurred while parsing values.");
+                    Column(
+                      children: [
+                        StreamBuilder(
+                          stream: ref.onValue,
+                          builder:
+                              (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                            if (!snapshot.hasData) {
+                              return const CircularProgressIndicator();
+                            } else {
+                              Map<dynamic, dynamic> map =
+                                  snapshot.data!.snapshot.value as dynamic;
+                              List<dynamic> data = [];
+                              data.clear();
+                              data = map.values.toList();
+                              int lastMonth;
+                              int startMonth;
+                              // String startMoonth;
+                              try {
+                                lastMonth =
+                                    int.parse(data[0]["last month"].toString());
+                                startMonth = int.parse(
+                                    data[0]["start month"].toString());
+                                debugPrint("Last Month: $lastMonth");
+                                debugPrint("Start Month: $startMonth");
+                              } catch (e) {
+                                debugPrint(e.toString());
+                                lastMonth = 0;
+                                startMonth = 0;
+                                // startMoonth = "";
+                                debugPrint(
+                                    "Error occurred while parsing values.");
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: HeatMap(
+                                    datasets: datelist,
+                                    colorTipCount: 0,
+                                    // colorTipHelper: [
+                                    //   Text("apsent"),
+                                    //   Text("pregent"),
+                                    //   // Text("data")
+                                    // ],
+                                    colorTipSize: 0,
+
+                                    // defaultColor: Colors.blue,
+                                    showColorTip: true,
+                                    borderRadius: 9,
+                                    scrollable: true,
+                                    showText: true,
+                                    textColor: Colors.black,
+                                    size: 30,
+                                    colorMode: ColorMode.opacity,
+                                    startDate:
+                                        DateTime(year.year, startMonth, 1),
+                                    endDate: DateTime(year.year, lastMonth, 31),
+                                    colorsets: {
+                                      // if()
+                                      1: Colors.green,
+                                      4: Colors.red,
+                                      2: Colors.purple,
+                                      3: Colors.yellow,
+                                    }),
+                              );
                             }
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: HeatMap(
-                                  datasets: datesheet,
-                                  colorTipCount: 0,
-                                  // colorTipHelper: [
-                                  //   Text("apsent"),
-                                  //   Text("pregent"),
-                                  //   // Text("data")
-                                  // ],
-                                  colorTipSize: 0,
-                                  // defaultColor: Colors.blue,
-                                  showColorTip: true,
-                                  borderRadius: 9,
-                                  scrollable: true,
-                                  showText: true,
-                                  textColor: Colors.black,
-                                  size: 30,
-                                  colorMode: ColorMode.opacity,
-                                  startDate: DateTime(year.year, startMonth, 1),
-                                  endDate: DateTime(year.year, lastMonth, 31),
-                                  colorsets: {
-                                    // if()
-                                    1: Colors.green,
-                                    4: Colors.red,
-                                    2: Colors.purple,
-                                    3: Colors.yellow,
-                                  }),
-                            );
-                          }
-                        },
-                      ),
+                          },
+                        ),
+                      ],
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          // final date = DateTime(year.year, 11, 6);
+                          // DateTime selectedDate = DateTime(2023, 11, 1);
+                          // String dateKey = selectedDate.toIso8601String();
+                          // int attendanceValue = 7;
+                          Map<String, int> datesheetData = {
+                            DateTime(year.year, 11, 2).toIso8601String(): 7
+                          };
+
                           await firestore
                               .collection("student")
                               .doc(auth.currentUser!.uid)
-                              .update({
-                            "datesheet": {
-                              DateTime(year.year, 11, 6).toString(): 7,
-                              DateTime(year.year, 11, 7).toString(): 7,
-                            }
-                          }).then((value) => debugPrint("check"));
+                              .collection("atten")
+                              .doc('1')
+                              .set({"datesheets": datesheetData}).then(
+                                  (value) => debugPrint("check"));
                         },
                         child: const Text("data")),
                   ],

@@ -6,7 +6,7 @@ class student {
   final String photourl;
   final String email;
   final String password;
-  final Map<DateTime, int>? datesheet; // Use String keys
+  final Map<String, int>? datesheet; // Use String keys
   final DateTime? date;
 
   student({
@@ -19,65 +19,24 @@ class student {
     required this.email,
   });
 
-  factory student.fromSnap(DocumentSnapshot snap) {
+  static student fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
-    Map<String, dynamic>? datesheet = snapshot["datesheet"];
-    if (datesheet != null) {
-      // Convert keys (String) to DateTime
-      Map<DateTime, int> datesheetMap = {};
-      datesheet.forEach((key, value) {
-        datesheetMap[DateTime.parse(key)] = value;
-      });
-
-      return student(
-        datesheet: datesheetMap,
-        password: snapshot["password"],
-        name: snapshot["name"],
-        uid: snapshot["uid"],
-        email: snapshot["email"],
-        photourl: snapshot["photourl"],
-        date: snapshot['date'],
-      );
-    }
-
     return student(
-      datesheet: null,
-      password: snapshot["password"],
+      datesheet: snapshot['datesheet'],
       name: snapshot["name"],
       uid: snapshot["uid"],
       email: snapshot["email"],
-      photourl: snapshot["photourl"],
-      date: snapshot['date'],
+      password: snapshot['password'],
+      photourl: snapshot['photourl'],
     );
   }
 
-  Map<String, dynamic> toJson() {
-    if (datesheet != null) {
-      // Convert keys (DateTime) to String
-      Map<String, dynamic> datesheetMap = {};
-      datesheet!.forEach((key, value) {
-        datesheetMap[key.toString()] = value;
-      });
-
-      return {
-        "datesheet": datesheetMap,
+  Map<String, dynamic> toJson() => {
+    "datesheet": datesheet,
         "name": name,
         "uid": uid,
         "email": email,
-        "photoUrl": photourl,
-        "password": password,
-        "date": date,
+        "photourl": photourl,
       };
-    }
-
-    return {
-      "name": name,
-      "uid": uid,
-      "email": email,
-      "photoUrl": photourl,
-      "password": password,
-      "date": date,
-    };
-  }
 }
