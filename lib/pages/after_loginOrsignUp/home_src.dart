@@ -214,7 +214,10 @@ class _HomeSrcState extends State<HomeSrc> {
                           // String dateKey = selectedDate.toIso8601String();
                           // int attendanceValue = 7;
                           Map<String, int> datesheetData = {
-                            DateTime(year.year, 11, 2).toIso8601String(): 7
+                            DateTime(year.year, 11, 2).toIso8601String(): 7,
+                            DateTime(year.year, 11, 3).toIso8601String(): 7,
+                            DateTime(year.year, 11, 4).toIso8601String(): 7,
+                            DateTime(year.year, 11, 5).toIso8601String(): 7
                           };
 
                           await firestore
