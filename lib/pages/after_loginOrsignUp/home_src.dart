@@ -180,13 +180,13 @@ class _HomeSrcState extends State<HomeSrc> {
                                   child: HeatMap(
                                       margin: EdgeInsets.all(5),
                                       defaultColor: Colors.white,
-                                      // datasets: datelist,
-                                      datasets: {
-                                        DateTime(year.year, 11, 2): 8,
-                                        DateTime(year.year, 11, 3): 20,
-                                        DateTime(year.year, 11, 4): 20,
-                                        DateTime(year.year, 11, 5): 20
-                                      },
+                                      datasets: datelist,
+                                      // datasets: {
+                                      //   DateTime(year.year, 11, 2): 8,
+                                      //   DateTime(year.year, 11, 3): 20,
+                                      //   DateTime(year.year, 11, 4): 20,
+                                      //   DateTime(year.year, 11, 5): 20
+                                      // },
                                       colorTipCount: 0,
                                       colorTipSize: 0,
                                       showColorTip: true,
@@ -224,16 +224,19 @@ class _HomeSrcState extends State<HomeSrc> {
                               DateTime(year.year, 11, 5).toIso8601String(): 7
                             };
 
-                            await firestore
-                                .collection("student")
-                                .doc(auth.currentUser!.uid)
-                                .collection("atten")
-                                .doc('1')
-                                .set({"datesheets": datesheetData}).then(
-                                    (value) {
-                              Get.to(() => const TempAtten());
-                              debugPrint("chekc");
-                            });
+                            // await firestore
+                            //     .collection("student")
+                            //     .doc(auth.currentUser!.uid)
+                            //     .collection("atten")
+                            //     .doc('1')
+                            //     .set({"datesheets": datesheetData}).then(
+                            //         (value) {
+                            //   Get.to(() => const TempAtten());
+                            //   debugPrint("chekc");
+                            // });
+                            Get.to(() => TempAtten(
+                                  datesheet: datelist,
+                                ));
                           },
                           child: const Text("data")),
                     ],
