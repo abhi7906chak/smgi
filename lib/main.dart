@@ -31,8 +31,9 @@ class _MainSrcState extends State<MainSrc> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "login_singup_page",
+      initialRoute: "homesrc",
       routes: {
+        // "tempatten": (context) => TempAtten(datesheet: datesheet)
         "homesrc": (context) => const HomeSrc(),
         "for": (context) => const FpassWord(),
         "verifyemail": (context) => const VerifyEmailSrc(),

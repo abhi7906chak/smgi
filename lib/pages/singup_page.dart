@@ -277,6 +277,7 @@ class _SingUpPageState extends State<SingUpPage> {
                               .then((value) async {
                             User user = auth.currentUser!;
                             final studentData = student(
+                              
                               name: namecon.text,
                               uid: user.uid,
                               photourl: "",
