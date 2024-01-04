@@ -6,6 +6,7 @@ import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
 import 'package:smgi/pages/forget_pass/password.dart';
 import 'package:smgi/pages/login_page.dart';
 import 'package:smgi/pages/login_sing_up_page.dart';
+import 'package:smgi/pages/shimmer_pages/Homesrc_shimmer.dart';
 import 'package:smgi/pages/singup_page.dart';
 import 'package:smgi/utiles/splash_src.dart';
 
@@ -34,6 +35,7 @@ class _MainSrcState extends State<MainSrc> {
       initialRoute: "homesrc",
       routes: {
         // "tempatten": (context) => TempAtten(datesheet: datesheet)
+        "HomeSrcShimmer": (context) => const HomeSrcShimmer(),
         "homesrc": (context) => const HomeSrc(),
         "for": (context) => const FpassWord(),
         "verifyemail": (context) => const VerifyEmailSrc(),
