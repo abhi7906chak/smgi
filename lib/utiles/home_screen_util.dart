@@ -10,7 +10,7 @@ class Homedata
   {
     return   StreamBuilder(stream: firestore.collection("student").snapshots(),
      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-      return HomeSrc();
+      return const HomeSrc();
                 
               },);
   }

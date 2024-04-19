@@ -6,12 +6,14 @@ class student {
   final String photourl;
   final String email;
   final String password;
-  final Map<String, int>? datesheet; // Use String keys
+  final String status;
+  // final Map<String, int>? datesheet; // Use String keys
   final DateTime? date;
 
   student({
     this.date,
-    this.datesheet,
+    required this.status,
+    // this.datesheet,
     required this.password,
     required this.name,
     required this.uid,
@@ -23,7 +25,8 @@ class student {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return student(
-      datesheet: snapshot['datesheet'],
+      // datesheet: snapshot['datesheet'],
+      status: snapshot["status"],
       name: snapshot["name"],
       uid: snapshot["uid"],
       email: snapshot["email"],
@@ -33,7 +36,8 @@ class student {
   }
 
   Map<String, dynamic> toJson() => {
-    "datesheet": datesheet,
+        // "datesheet": datesheet,
+        "status": status,
         "name": name,
         "uid": uid,
         "email": email,

@@ -93,7 +93,7 @@ class _HomeSrcShimmerState extends State<HomeSrcShimmer> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(30.0),
+                    padding: const EdgeInsets.all(30.0),
                     child: Shimmer.fromColors(
                         baseColor: Colors.grey.withOpacity(0.45),
                         highlightColor: Colors.white.withOpacity(0.80),

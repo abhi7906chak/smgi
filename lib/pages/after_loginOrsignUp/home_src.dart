@@ -34,17 +34,17 @@ class _HomeSrcState extends State<HomeSrc> {
     try {
       var userdata = await FirebaseFirestore.instance
           .collection("student")
-          .doc(auth.currentUser!.uid)
+          .doc(auth.currentUser!.email)
           .get();
       var date = await FirebaseFirestore.instance
           .collection("student")
-          .doc(auth.currentUser!.uid)
+          .doc(auth.currentUser!.email)
           .collection('atten')
           .doc(year.year.toString())
           .get();
-      setState(() async {
+      setState(() {
         userData = userdata.data()!;
-        Map<String, dynamic> sheet = await date.data()!['datesheets'];
+        Map<String, dynamic> sheet = date.data()!['datesheets'];
         debugPrint('$sheet');
 
         datelist.clear(); // Clear existing data
@@ -58,7 +58,7 @@ class _HomeSrcState extends State<HomeSrc> {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return Future.delayed(Duration(seconds: 2));
+    return Future.delayed(const Duration(seconds: 2));
   }
 
   @override
@@ -67,24 +67,24 @@ class _HomeSrcState extends State<HomeSrc> {
     func();
   }
 
-  func() async {
+  Future<void> func() async {
     try {
       setState(() {
         isLoading = true;
       });
       var userdata = await FirebaseFirestore.instance
           .collection("student")
-          .doc(auth.currentUser!.uid)
+          .doc(auth.currentUser!.email)
           .get();
       var date = await FirebaseFirestore.instance
           .collection("student")
-          .doc(auth.currentUser!.uid)
+          .doc(auth.currentUser!.email)
           .collection('atten')
           .doc(year.year.toString())
           .get();
-      setState(() async {
+      setState(() {
         userData = userdata.data()!;
-        Map<String, dynamic> sheet = await date.data()!['datesheets'];
+        Map<String, dynamic> sheet = date.data()!['datesheets'];
         debugPrint('$sheet');
 
         sheet.forEach((key, value) {
