@@ -4,9 +4,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
-import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:smgi/temp_atten.dart';
+// import 'package:smgi/temp_atten/.dart';
 
 class HomeSrc extends StatefulWidget {
   const HomeSrc({super.key});
@@ -22,6 +21,7 @@ class _HomeSrcState extends State<HomeSrc> {
   final firestore = FirebaseFirestore.instance;
   late final String name;
   Map<DateTime, int> datelist = {};
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   // Map<DateTime, int> datesheet = {};
   // Map<DateTime, int> datesheets = {};
@@ -111,9 +111,55 @@ class _HomeSrcState extends State<HomeSrc> {
               child: CircularProgressIndicator(),
             )
           : Scaffold(
+              key: _scaffoldKey,
+              endDrawer: Drawer(
+                // backgroundColor:
+                child: Container(
+                    color: Colors.white,
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            height: 100,
+                            width: double.infinity,
+                            // color: Colors.red,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: ListTile(
+                                leading: Container(
+                                  height: 70,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
+                                ),
+                                title: Text(
+                                  userData['name'],
+                                  style: const TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  auth.currentUser!.email.toString(),
+                                  style: TextStyle(
+                                    fontFamily: 'Encode',
+                                    fontSize: 15,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ],
+                    )),
+              ),
               body: LiquidPullToRefresh(
                 showChildOpacityTransition: false,
-                color: Color.fromARGB(255, 100, 100, 237),
+                color: const Color.fromARGB(255, 100, 100, 237),
                 height: MediaQuery.of(context).size.height * 0.3,
                 onRefresh: () => RefreshMethod(),
                 child: ListView(children: [
@@ -130,17 +176,22 @@ class _HomeSrcState extends State<HomeSrc> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Row(
                                   children: [
-                                    const CircleAvatar(
-                                      maxRadius: 30,
-                                      child: Text("image "),
+                                    Stack(
+                                      children: [
+                                        const CircleAvatar(
+                                          maxRadius: 30,
+                                          child: Text("image "),
+                                        ),
+                                      ],
+                                      // child:
                                     ),
                                     const SizedBox(
                                       width: 10,
                                     ),
                                     Text(
                                       userData['name'],
-                                      style:
-                                          const TextStyle(fontFamily: "Encode"),
+                                      style: const TextStyle(
+                                          fontFamily: "Encode", fontSize: 20),
                                     ),
                                   ],
                                 ),
@@ -148,25 +199,31 @@ class _HomeSrcState extends State<HomeSrc> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                      height: 40,
-                                      width: 90,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          gradient: const LinearGradient(
-                                              begin: Alignment.topLeft,
-                                              colors: [
-                                                Color(0xFF161697),
-                                                Color(0xFF9747FF),
-                                              ])),
-                                      child: const Center(
-                                          child: Text(
-                                        "Menu",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "Encode"),
-                                      ))),
+                                  InkWell(
+                                    onTap: () {
+                                      openDrawer();
+                                      print("menu");
+                                    },
+                                    child: Container(
+                                        height: 40,
+                                        width: 90,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(19),
+                                            gradient: const LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                colors: [
+                                                  Color(0xFF161697),
+                                                  Color(0xFF9747FF),
+                                                ])),
+                                        child: const Center(
+                                            child: Text(
+                                          "Menu",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Encode"),
+                                        ))),
+                                  ),
                                   const SizedBox(
                                     width: 10,
                                   )
@@ -247,15 +304,8 @@ class _HomeSrcState extends State<HomeSrc> {
                               ),
                             ],
                           ),
-                          ElevatedButton(
-                              onPressed: () async {
-                                Get.to(() => TempAtten(
-                                      datesheet: datelist,
-                                    ));
-                              },
-                              child: const Text("data")),
                           const Padding(
-                            padding: EdgeInsets.all(30.0),
+                            padding: EdgeInsets.only(top: 10.00, left: 30.00),
                             child: Text(
                               "Subjects",
                               style: TextStyle(
@@ -272,5 +322,9 @@ class _HomeSrcState extends State<HomeSrc> {
               ),
             ),
     );
+  }
+
+  void openDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
   }
 }
