@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:smgi/utiles/user_profile_post_button.dart';
+import 'package:smgi/utiles/widgets/icon_user_profile.dart';
+
 // import 'package:smgi/temp_atten/.dart';
 
 class HomeSrc extends StatefulWidget {
@@ -20,17 +28,29 @@ class _HomeSrcState extends State<HomeSrc> {
   final year = DateTime.now();
   final firestore = FirebaseFirestore.instance;
   late final String name;
+  final ImagePicker picker = ImagePicker();
+  File? image;
+  String ImageUrl= "";
   Map<DateTime, int> datelist = {};
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
-  // Map<DateTime, int> datesheet = {};
-  // Map<DateTime, int> datesheets = {};
   bool isLoading = false;
   var userData = {};
+
+  Future<void> getImage(ImageSource source) async {
+    final XFile? pickedFile = await picker.pickImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+        print("aa gyi" + image.toString());
+      } else {
+        print("user exit the program");
+      }
+    });
+  }
+
   Map<String, dynamic> datesheetString = {};
   Future<void> RefreshMethod() async {
-    // func();
-    // initState();
     try {
       var userdata = await FirebaseFirestore.instance
           .collection("student")
@@ -113,47 +133,172 @@ class _HomeSrcState extends State<HomeSrc> {
           : Scaffold(
               key: _scaffoldKey,
               endDrawer: Drawer(
-                // backgroundColor:
-                child: Container(
-                    color: Colors.white,
+                child: SizedBox(
                     height: double.infinity,
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                            height: 100,
-                            width: double.infinity,
-                            // color: Colors.red,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: ListTile(
-                                leading: Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle),
-                                ),
-                                title: Text(
-                                  userData['name'],
-                                  style: const TextStyle(
+                        SizedBox(
+                          height: 100,
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 30, left: 20),
+                            child: Text(
+                              "Hello,  " + userData['name'],
+                              style: const TextStyle(
+                                fontFamily: "Encode",
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF161697),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Divider(
+                          // indent: 50,
+                          endIndent: 50,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading:
+                                    const FaIcon(FontAwesomeIcons.userLarge),
+                                title: const Text(
+                                  "Profile",
+                                  style: TextStyle(
                                     fontFamily: "Encode",
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF161697),
                                   ),
                                 ),
-                                subtitle: Text(
-                                  auth.currentUser!.email.toString(),
+                                onTap: () =>
+                                    Get.to(() => const IconUserProfile()),
+                              ),
+                              ListTile(
+                                leading:
+                                    const FaIcon(FontAwesomeIcons.bookOpen),
+                                title: const Text(
+                                  "Subjects",
                                   style: TextStyle(
-                                    fontFamily: 'Encode',
-                                    fontSize: 15,
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Get.back();
+                                },
+                              ),
+                              const ListTile(
+                                leading:
+                                    FaIcon(FontAwesomeIcons.bookOpenReader),
+                                title: Text(
+                                  "Courses",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
                                     color: Color(0xFF161697),
                                   ),
                                 ),
                               ),
-                            )),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.solidBell),
+                                title: Text(
+                                  "Notifications",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading:
+                                    FaIcon(FontAwesomeIcons.solidCalendarDays),
+                                title: Text(
+                                  "Events",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.dollarSign),
+                                title: Text(
+                                  "Fees",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.robot),
+                                title: Text(
+                                  "Artificial Intelligence",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.gear),
+                                title: Text(
+                                  "settings",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.solidLifeRing),
+                                title: Text(
+                                  "Support",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                              const ListTile(
+                                leading: FaIcon(FontAwesomeIcons.circleInfo),
+                                title: Text(
+                                  "About",
+                                  style: TextStyle(
+                                    fontFamily: "Encode",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF161697),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     )),
               ),
@@ -178,9 +323,53 @@ class _HomeSrcState extends State<HomeSrc> {
                                   children: [
                                     Stack(
                                       children: [
-                                        const CircleAvatar(
-                                          maxRadius: 30,
-                                          child: Text("image "),
+                                        InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      "Select any one of them"),
+                                                  actionsAlignment:
+                                                      MainAxisAlignment.start,
+                                                  actions: [
+                                                    Column(
+                                                      children: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              getImage(
+                                                                  ImageSource
+                                                                      .gallery);
+                                                            ImageUrl =  postButton().uploadProfile(
+                                                                  image!,
+                                                                  auth.currentUser!
+                                                                      .email
+                                                                      .toString()) as String;
+                                                              // Get.back();
+                                                            },
+                                                            child: const Text(
+                                                                "Gallery")),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              getImage(
+                                                                  ImageSource
+                                                                      .camera);
+                                                              Get.back();
+                                                            },
+                                                            child: const Text(
+                                                                "Camera")),
+                                                      ],
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: const CircleAvata(
+                                            maxRadius: 30,
+                                            // child: NetworkImage(ImageUrl),
+                                          ),
                                         ),
                                       ],
                                       // child:
