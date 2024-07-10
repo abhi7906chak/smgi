@@ -366,7 +366,7 @@ class _HomeSrcState extends State<HomeSrc> {
                                               },
                                             );
                                           },
-                                          child: const CircleAvata(
+                                          child: const CircleAvatar(
                                             maxRadius: 30,
                                             // child: NetworkImage(ImageUrl),
                                           ),
