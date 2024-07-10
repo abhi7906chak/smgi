@@ -32,7 +32,7 @@ class _MainSrcState extends State<MainSrc> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "homesrc",
+      initialRoute: "loginsrc",
       routes: {
         // "tempatten": (context) => TempAtten(datesheet: datesheet)
         "HomeSrcShimmer": (context) => const HomeSrcShimmer(),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -30,7 +31,7 @@ class _HomeSrcState extends State<HomeSrc> {
   late final String name;
   final ImagePicker picker = ImagePicker();
   File? image;
-  String ImageUrl= "";
+  String ImageUrl = "";
   Map<DateTime, int> datelist = {};
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   bool isLoading = false;
@@ -324,53 +325,98 @@ class _HomeSrcState extends State<HomeSrc> {
                                     Stack(
                                       children: [
                                         InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                      "Select any one of them"),
-                                                  actionsAlignment:
-                                                      MainAxisAlignment.start,
-                                                  actions: [
-                                                    Column(
-                                                      children: [
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              getImage(
-                                                                  ImageSource
-                                                                      .gallery);
-                                                            ImageUrl =  postButton().uploadProfile(
-                                                                  image!,
-                                                                  auth.currentUser!
-                                                                      .email
-                                                                      .toString()) as String;
-                                                              // Get.back();
-                                                            },
-                                                            child: const Text(
-                                                                "Gallery")),
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              getImage(
-                                                                  ImageSource
-                                                                      .camera);
-                                                              Get.back();
-                                                            },
-                                                            child: const Text(
-                                                                "Camera")),
-                                                      ],
-                                                    )
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: const CircleAvatar(
-                                            maxRadius: 30,
-                                            // child: NetworkImage(ImageUrl),
-                                          ),
-                                        ),
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        "Select any one of them"),
+                                                    actionsAlignment:
+                                                        MainAxisAlignment.start,
+                                                    actions: [
+                                                      Column(
+                                                        children: [
+                                                          TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await getImage(
+                                                                    ImageSource
+                                                                        .gallery);
+                                                                String?
+                                                                    imageUrl =
+                                                                    await postButton().uploadProfile(
+                                                                        image!,
+                                                                        auth.currentUser!
+                                                                            .email
+                                                                            .toString());
+                                                                if (imageUrl !=
+                                                                    null) {
+                                                                  ImageUrl =
+                                                                      imageUrl;
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          "student")
+                                                                      .doc(auth
+                                                                          .currentUser!
+                                                                          .email)
+                                                                      .update({
+                                                                    "photourl":
+                                                                        ImageUrl
+                                                                            .toString()
+                                                                  });
+                                                                  print(
+                                                                      "Image             $ImageUrl");
+                                                                } else {
+                                                                  ImageUrl = "";
+                                                                  print(
+                                                                      "Image             $ImageUrl");
+                                                                }
+                                                                // Get.back();
+                                                              },
+                                                              child: const Text(
+                                                                  "Gallery")),
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                getImage(
+                                                                    ImageSource
+                                                                        .camera);
+                                                                Get.back();
+                                                              },
+                                                              child: const Text(
+                                                                  "Camera")),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 30,
+                                              // height: 30,
+                                              child: CachedNetworkImage(
+                                                  // fit: BoxFit.cover,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              fit: BoxFit.cover,
+                                                              image:
+                                                                  imageProvider),
+                                                        ),
+                                                      ),
+                                                  // width: 30,
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  imageUrl:
+                                                      userData["photourl"]),
+                                            )),
                                       ],
                                       // child:
                                     ),
