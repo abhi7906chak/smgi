@@ -13,7 +13,7 @@ import firebase_database
 import firebase_storage
 import google_sign_in_ios
 import path_provider_foundation
-import sqflite
+import sqflite_darwin
 import video_player_avfoundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

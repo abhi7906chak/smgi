@@ -106,6 +106,7 @@ class _FpassWordState extends State<FpassWord> {
                           snack_bar(
                               "Sent !!",
                               "Check Mail And Reset You Password",
+                              // ignore: use_build_context_synchronously
                               context,
                               ContentType.success);
                           Get.back();

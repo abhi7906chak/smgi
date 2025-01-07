@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -249,8 +251,8 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                      elevation: WidgetStateProperty.all(0),
+                      backgroundColor: WidgetStateProperty.all(Colors.white)),
                   child: SizedBox(
                       height: 40,
                       width: 42,

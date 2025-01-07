@@ -1,17 +1,14 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:smgi/utiles/user_profile_post_button.dart';
 import 'package:smgi/utiles/widgets/icon_user_profile.dart';
 
 // import 'package:smgi/temp_atten/.dart';
@@ -29,28 +26,13 @@ class _HomeSrcState extends State<HomeSrc> {
   final year = DateTime.now();
   final firestore = FirebaseFirestore.instance;
   late final String name;
-  final ImagePicker picker = ImagePicker();
-  File? image;
-  String ImageUrl = "";
   Map<DateTime, int> datelist = {};
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   bool isLoading = false;
   var userData = {};
 
-  Future<void> getImage(ImageSource source) async {
-    final XFile? pickedFile = await picker.pickImage(source: source);
-
-    setState(() {
-      if (pickedFile != null) {
-        image = File(pickedFile.path);
-        print("aa gyi" + image.toString());
-      } else {
-        print("user exit the program");
-      }
-    });
-  }
-
   Map<String, dynamic> datesheetString = {};
+  // ignore: non_constant_identifier_names
   Future<void> RefreshMethod() async {
     try {
       var userdata = await FirebaseFirestore.instance
@@ -65,6 +47,7 @@ class _HomeSrcState extends State<HomeSrc> {
           .get();
       setState(() {
         userData = userdata.data()!;
+        setState(() {});
         Map<String, dynamic> sheet = date.data()!['datesheets'];
         debugPrint('$sheet');
 
@@ -146,6 +129,7 @@ class _HomeSrcState extends State<HomeSrc> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 30, left: 20),
                             child: Text(
+                              // ignore: prefer_interpolation_to_compose_strings
                               "Hello,  " + userData['name'],
                               style: const TextStyle(
                                 fontFamily: "Encode",
@@ -324,99 +308,32 @@ class _HomeSrcState extends State<HomeSrc> {
                                   children: [
                                     Stack(
                                       children: [
-                                        InkWell(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                        "Select any one of them"),
-                                                    actionsAlignment:
-                                                        MainAxisAlignment.start,
-                                                    actions: [
-                                                      Column(
-                                                        children: [
-                                                          TextButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await getImage(
-                                                                    ImageSource
-                                                                        .gallery);
-                                                                String?
-                                                                    imageUrl =
-                                                                    await postButton().uploadProfile(
-                                                                        image!,
-                                                                        auth.currentUser!
-                                                                            .email
-                                                                            .toString());
-                                                                if (imageUrl !=
-                                                                    null) {
-                                                                  ImageUrl =
-                                                                      imageUrl;
-                                                                  await FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          "student")
-                                                                      .doc(auth
-                                                                          .currentUser!
-                                                                          .email)
-                                                                      .update({
-                                                                    "photourl":
-                                                                        ImageUrl
-                                                                            .toString()
-                                                                  });
-                                                                  print(
-                                                                      "Image             $ImageUrl");
-                                                                } else {
-                                                                  ImageUrl = "";
-                                                                  print(
-                                                                      "Image             $ImageUrl");
-                                                                }
-                                                                // Get.back();
-                                                              },
-                                                              child: const Text(
-                                                                  "Gallery")),
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                getImage(
-                                                                    ImageSource
-                                                                        .camera);
-                                                                Get.back();
-                                                              },
-                                                              child: const Text(
-                                                                  "Camera")),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: CircleAvatar(
-                                              radius: 30,
-                                              // height: 30,
-                                              child: CachedNetworkImage(
-                                                  // fit: BoxFit.cover,
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  imageProvider),
-                                                        ),
-                                                      ),
-                                                  // width: 30,
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  imageUrl:
-                                                      userData["photourl"]),
-                                            )),
+                                        CircleAvatar(
+                                          radius: 30,
+                                          // height: 30,
+                                          child: CachedNetworkImage(
+                                              // fit: BoxFit.cover,
+                                              imageBuilder: (context,
+                                                      imageProvider) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: imageProvider),
+                                                    ),
+                                                  ),
+                                              // width: 30,
+                                              fadeInCurve: Curves.bounceIn,
+                                              placeholder: (context, url) =>
+                                                  const SizedBox(
+                                                    height: 50,
+                                                    width: 50,
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                              imageUrl: userData["photourl"]),
+                                        ),
                                       ],
                                       // child:
                                     ),
@@ -437,7 +354,9 @@ class _HomeSrcState extends State<HomeSrc> {
                                   InkWell(
                                     onTap: () {
                                       openDrawer();
-                                      print("menu");
+                                      if (kDebugMode) {
+                                        print("menu");
+                                      }
                                     },
                                     child: Container(
                                         height: 40,

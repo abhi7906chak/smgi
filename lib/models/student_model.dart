@@ -1,16 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: camel_case_types
 class student {
   final String name;
   final String uid;
   final String photourl;
   final String email;
   final String password;
-  final String status;
+  final String? phonenum;
+  final String? rollnum;
+  final String? aadharnum;
+  final String? fathername;
+  final String? mothername;
+  final String? abcid;
+  final String? status;
   // final Map<String, int>? datesheet; // Use String keys
   final DateTime? date;
 
   student({
+    this.phonenum,
+    this.rollnum,
+    this.aadharnum,
+    this.fathername,
+    this.mothername,
+    this.abcid,
     this.date,
     required this.status,
     // this.datesheet,
@@ -25,6 +38,12 @@ class student {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return student(
+      phonenum: snapshot["phonenum"],
+      rollnum: snapshot["rollnum"],
+      aadharnum: snapshot["aadharnum"],
+      fathername: snapshot["fathername"],
+      mothername: snapshot["mothername"],
+      abcid: snapshot["abcid"],
       // datesheet: snapshot['datesheet'],
       status: snapshot["status"],
       name: snapshot["name"],
