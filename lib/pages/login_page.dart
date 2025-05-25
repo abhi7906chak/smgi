@@ -1,4 +1,7 @@
+// pages/login_page.dart
 // ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer' as developer;
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
@@ -150,7 +153,7 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                       width: 250,
                       child: TextButton(
                           onPressed: () {
-                            Get.to(()=> const FpassWord());
+                            Get.to(() => const FpassWord());
                           },
                           child: const Text(
                             "Forget Password ?",
@@ -183,6 +186,8 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
                       } else {
                         show();
                         if (checkEmail()) {
+                          developer.log(emailcon.text.toString());
+                          developer.log(passcon.text.toString());
                           await auth
                               .signInWithEmailAndPassword(
                                   email: emailcon.text, password: passcon.text)
@@ -324,6 +329,7 @@ class _LoginPageSrcState extends State<LoginPageSrc> {
     } else {
       snack_bar("Error !!", "Check Your Internet Conection Or Try Again",
           context, ContentType.failure);
+      developer.log(e.toString());
     }
   }
 }

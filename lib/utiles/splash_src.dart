@@ -1,3 +1,5 @@
+// utiles/splash_src.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smgi/pages/after_loginOrsignUp/home_src.dart';
@@ -45,25 +47,50 @@ class _SplashSrcState extends State<SplashSrc> {
     go();
   }
 
-  void go() {
+  void go() async {
     final user = auth.currentUser;
-    if (user != null && user.emailVerified) {
-      Navigator.pushAndRemoveUntil(
+
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection("student")
+          .doc(user.email)
+          .get();
+
+      final data = doc.data();
+      final status =
+          data?['status']; // ye 'pending', 'approved', etc ho sakta hai
+
+      print("status: $status");
+
+      if (status == "approved") {
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const HomeSrc(),
           ),
-          (route) => false);
-    } else {
-      Navigator.pushAndRemoveUntil(
+          (route) => false,
+        );
+      } else {
+        // agar status null hai ya pending ho
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginSingUpPage(),
           ),
-          (route) => false);
+          (route) => false,
+        );
+        // snack_bar("Validate First", "Ask you Teacher to validate you soon",
+        //     context, ContentType.warning);
+      }
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginSingUpPage(),
+        ),
+        (route) => false,
+      );
     }
-
-    // Get.offAll(() => const LoginSingUpPage());
   }
 
   @override

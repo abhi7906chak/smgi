@@ -1,3 +1,4 @@
+// pages/after_loginOrsignUp/home_src.dart
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,14 @@ import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:smgi/utiles/ai_src.dart';
+import 'package:smgi/utiles/comming_soon.dart';
+import 'package:smgi/utiles/notification.dart';
+import 'package:smgi/utiles/setting.dart';
+import 'package:smgi/utiles/social_links.dart';
+import 'package:smgi/utiles/subjects.dart';
+import 'package:smgi/utiles/support.dart';
+import 'package:smgi/utiles/time_table.dart';
 import 'package:smgi/utiles/widgets/icon_user_profile.dart';
 
 // import 'package:smgi/temp_atten/.dart';
@@ -29,6 +38,7 @@ class _HomeSrcState extends State<HomeSrc> {
   Map<DateTime, int> datelist = {};
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   bool isLoading = false;
+  String timetablestring = '';
   var userData = {};
 
   Map<String, dynamic> datesheetString = {};
@@ -69,6 +79,30 @@ class _HomeSrcState extends State<HomeSrc> {
   void initState() {
     super.initState();
     func();
+    getTimetable();
+  }
+
+  Future<void> getTimetable() async {
+    try {
+      var docSnapshot = await FirebaseFirestore.instance
+          .collection("Teacher")
+          .doc("abhi1@gmail.com")
+          .get();
+
+      if (docSnapshot.exists) {
+        var data = docSnapshot.data();
+        var timetable = data?['timetable'] as String?;
+        print("Fetched timetable: $timetable");
+
+        setState(() {
+          timetablestring = timetable ?? "No URL found";
+        });
+      } else {
+        print("Document does not exist");
+      }
+    } catch (e) {
+      print("Error fetching timetable: $e");
+    }
   }
 
   Future<void> func() async {
@@ -76,6 +110,7 @@ class _HomeSrcState extends State<HomeSrc> {
       setState(() {
         isLoading = true;
       });
+
       var userdata = await FirebaseFirestore.instance
           .collection("student")
           .doc(auth.currentUser!.email)
@@ -183,101 +218,160 @@ class _HomeSrcState extends State<HomeSrc> {
                                   Get.back();
                                 },
                               ),
-                              const ListTile(
-                                leading:
-                                    FaIcon(FontAwesomeIcons.bookOpenReader),
-                                title: Text(
-                                  "Courses",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const ComingSoonPage(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading:
+                                      FaIcon(FontAwesomeIcons.bookOpenReader),
+                                  title: Text(
+                                    "Courses",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.solidBell),
-                                title: Text(
-                                  "Notifications",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const PostListScreen(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(FontAwesomeIcons.solidBell),
+                                  title: Text(
+                                    "Notifications",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading:
-                                    FaIcon(FontAwesomeIcons.solidCalendarDays),
-                                title: Text(
-                                  "Events",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const ComingSoonPage(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(
+                                      FontAwesomeIcons.solidCalendarDays),
+                                  title: Text(
+                                    "Events",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.dollarSign),
-                                title: Text(
-                                  "Fees",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const ComingSoonPage(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(FontAwesomeIcons.dollarSign),
+                                  title: Text(
+                                    "Fees",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.robot),
-                                title: Text(
-                                  "Artificial Intelligence",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const AiSrc(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(FontAwesomeIcons.robot),
+                                  title: Text(
+                                    "Artificial Intelligence",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.gear),
-                                title: Text(
-                                  "settings",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const StaticSettingsScreen(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(FontAwesomeIcons.gear),
+                                  title: Text(
+                                    "settings",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.solidLifeRing),
-                                title: Text(
-                                  "Support",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const CollegeSupportScreen(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading:
+                                      FaIcon(FontAwesomeIcons.solidLifeRing),
+                                  title: Text(
+                                    "Support",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
-                              const ListTile(
-                                leading: FaIcon(FontAwesomeIcons.circleInfo),
-                                title: Text(
-                                  "About",
-                                  style: TextStyle(
-                                    fontFamily: "Encode",
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF161697),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(
+                                      () => const SocialLinksScreen(
+                                            facebookUrl:
+                                                "https://www.facebook.com/profile.php?id=100022992082245",
+                                            instagramUrl:
+                                                "https://www.instagram.com/abhishek_khatik_214/",
+                                            githubUrl:
+                                                "https://github.com/abhi7906chak",
+                                            linkedinUrl:
+                                                "https://www.linkedin.com/in/abhishek-kumar-chak/",
+                                          ),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: const ListTile(
+                                  leading: FaIcon(FontAwesomeIcons.circleInfo),
+                                  title: Text(
+                                    "About: Developer",
+                                    style: TextStyle(
+                                      fontFamily: "Encode",
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF161697),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -458,15 +552,19 @@ class _HomeSrcState extends State<HomeSrc> {
                               ),
                             ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 10.00, left: 30.00),
-                            child: Text(
-                              "Subjects",
-                              style: TextStyle(
-                                  fontFamily: "Encode",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
+                          // const Padding(
+                          //   padding: EdgeInsets.only(top: 10.00, left: 30.00),
+                          //   child: Text(
+                          //     "Subjects",
+                          //     style: TextStyle(
+                          //         fontFamily: "Encode",
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 20),
+                          //   ),
+                          // ),
+                          SubjectsCard(teacherEmail: "abhi1@gmail.com"),
+                          TimetableCard(
+                            imageUrl: timetablestring ?? "",
                           ),
                         ],
                       ),

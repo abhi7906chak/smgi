@@ -1,3 +1,4 @@
+// models/student_model.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
@@ -6,7 +7,7 @@ class student {
   final String uid;
   final String photourl;
   final String email;
-  final String password;
+  final String password1;
   final String? phonenum;
   final String? rollnum;
   final String? aadharnum;
@@ -27,7 +28,7 @@ class student {
     this.date,
     required this.status,
     // this.datesheet,
-    required this.password,
+    required this.password1,
     required this.name,
     required this.uid,
     required this.photourl,
@@ -49,7 +50,7 @@ class student {
       name: snapshot["name"],
       uid: snapshot["uid"],
       email: snapshot["email"],
-      password: snapshot['password'],
+      password1: snapshot['password1'],
       photourl: snapshot['photourl'],
     );
   }
@@ -61,5 +62,6 @@ class student {
         "uid": uid,
         "email": email,
         "photourl": photourl,
+        "password1": password1,
       };
 }

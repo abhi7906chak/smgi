@@ -1,3 +1,4 @@
+// pages/singup_page.dart
 // import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 // ignore_for_file: use_build_context_synchronously
 
@@ -284,7 +285,7 @@ class _SingUpPageState extends State<SingUpPage> {
                               uid: user.uid,
                               photourl: "",
                               email: emailcon.text,
-                              password: passwordcon.text,
+                              password1: passwordcon.text,
                             ).toJson();
                             await firestore
                                 .collection("student")
@@ -440,6 +441,7 @@ class _SingUpPageState extends State<SingUpPage> {
   void firebaseError(Object e) {
     if (e is FirebaseAuthException) {
       snack_bar("Error!", e.message.toString(), context, ContentType.failure);
+      debugPrint(e.toString());
     } else {
       snack_bar("Error!", e.toString(), context, ContentType.failure);
     }
